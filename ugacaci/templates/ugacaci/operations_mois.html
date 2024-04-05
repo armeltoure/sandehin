@@ -1,0 +1,55 @@
+{% extends 'ugacaci/base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center alert alert-success">
+        <h1>Opérations du Mois</h1>
+    </div>
+   
+
+    <!-- Affichage des mois sous forme de liens -->
+    <div class="text-center">
+        {% for month in months %}
+            <a href="?mois={{ month }}" class="btn {% if month == selected_month %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ month }}</a>
+            {% if not forloop.last %} | {% endif %}
+        {% endfor %}
+    </div>
+    <br>
+
+    <!-- Vérifier si des opérations sont disponibles pour le mois sélectionné -->
+    {% if operations %}
+        <div class="d-flex justify-content-center">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nom & Prénoms du client</th>
+                        <th>Date de l'opération</th>
+                        <th>Type d'opération</th>
+                        <th>Montant</th>
+                        <th>Lieu_operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for operation in operations %}
+                        <tr>
+                            <td>{{ operation.compte.client.nom_prenoms|title }}</td>
+                            <td>{{ operation.date_operation }}</td>
+                            <td>{{ operation.type_operation }}</td>
+                            <td>{{ operation.montant|intcomma }} FCFA</td>
+                            <td>{{ operation.lieu_operation }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <!-- Affichage si aucune opération n'existe pour le mois sélectionné -->
+        <div class="text-center">
+            <h4>Aucune donnée pour ce mois.</h4>
+        </div>
+    {% endif %}
+    <a href="{% url 'operation' %}" class="badge badge-pill badge-warning" valeur="Retour">RETOUR</a>
+</div>
+
+{% endblock %}

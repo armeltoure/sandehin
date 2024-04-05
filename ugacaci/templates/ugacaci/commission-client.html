@@ -1,0 +1,21 @@
+<!-- votre_template.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Commissions par client</h2>
+
+{% for client_data in commissions_par_client %}
+    <h3>{{ client_data.client.nom_prenoms }}</h3>
+    <ul>
+        {% for commission in client_data.commissions %}
+            <li>{{ commission.commission.montant }} FCFA - {{ commission.date_creation }}</li>
+        {% endfor %}
+    </ul>
+    <p>Total des commissions : {{ client_data.total_commissions }} FCFA</p>
+{% endfor %}
+
+<hr>
+
+<h2>Somme totale des commissions</h2>
+<p>{{ total_commissions }} FCFA</p>
+{% endblock %}

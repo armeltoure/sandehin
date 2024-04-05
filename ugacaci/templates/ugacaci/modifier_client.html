@@ -1,0 +1,22 @@
+{% extends 'ugacaci/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center alert alert-info">Modifier les informations du client</h2>
+    <form method="post" class="p-3 border rounded">
+        {% csrf_token %}
+        <!-- Utilisation de la boucle pour afficher les champs individuellement -->
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+    </form>
+</div>
+
+{% endblock %}

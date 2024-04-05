@@ -1,0 +1,149 @@
+{% extends 'ugacaci/base.html' %}
+{% load humanize %} 
+{% block content %}
+<div class="container-fluid">
+    <h2 class="text-center alert alert-success font-weight-normal">Liste des demandes de prêt confirmées</h2>
+    
+    <!-- Barre de recherche -->
+    <div class="row mb-3">
+        <div class="col-md-6 offset-md-3">
+            <input type="text" class="form-control" id="searchInput" placeholder="Rechercher par numéro de téléphone" oninput="search()">
+        </div>
+    </div>
+    
+    {% if prets_confirms %}
+    <div class="table-responsive-fluid">
+        <table class="table table-bordered" id="pretTable">
+            <thead>
+                <tr>
+                    <th>Adherent</th>
+                    <th>Numéro de téléphone</th>
+                    <th>Montant demandé</th>
+                    <th>Date de demande</th>
+                    <th>Lieu de demande</th>
+                    <th>Date de remboursement</th>
+                    <th>Montant de remboursement</th>
+                    <th>Versement du client</th>
+                    <th>Action</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for pret in prets_confirms %}
+                <tr>
+                    <td>{{ pret.client.nom_prenoms }}</td>
+                    <td>{{ pret.client.numero_telephone }}</td>
+                    <td>{{ pret.montant_demande|intcomma }} FCFA</td>
+                    <td>{{ pret.date_demande }}</td>
+                    <td>{{ pret.lieu_demande|default_if_none:"N/A" }}</td>
+                    <td>{{ pret.date_rembourssement|default_if_none:"N/A" }}</td>
+                    <td id="montant_rembourse_{{ pret.id }}">{{ pret.montant_rembourssement|intcomma }} FCFA</td>
+                    <td>
+                        <!-- Champ pour saisir le versement du client -->
+                        <form method="post" action="/effectuer_versement/{{ pret.id }}/" class="versement-form">
+                            {% csrf_token %}
+                            <p><input type="number" name="montant_versement" placeholder="Montant du versement"></p>
+                            <td class="text-center">
+    <button type="submit" class="btn btn-success btn-sm">Effectuer versement</button>
+</td>
+
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Aucune demande de prêt confirmée pour le moment.</p>
+    {% endif %}
+</div>
+<!-- Zone pour afficher le message de succès -->
+    <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+</div>
+
+<script>
+// Fonction pour effectuer un versement
+function effectuerVersement(event, pretId) {
+    event.preventDefault();
+    
+    var montantInput = document.getElementById('montant_versement_' + pretId);
+    var montantVersement = parseInt(montantInput.value);
+    
+    if (!isNaN(montantVersement) && montantVersement > 0) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/effectuer_versement/" + pretId + "/", true);
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    var montantRemboursementCell = document.getElementById('montant_rembourse_' + pretId);
+                    montantRemboursementCell.textContent = response.nouveau_montant.toLocaleString() + " FCFA";
+                    montantInput.value = ""; // Réinitialiser le champ de saisie du montant de versement
+                    showSuccessMessage("Versement effectué avec succès.");
+                } else {
+                    alert(response.message); // Afficher une alerte en cas d'erreur
+                }
+            }
+        };
+        xhr.send(JSON.stringify({montant_versement: montantVersement}));
+    } else {
+        alert("Veuillez saisir un montant de versement valide."); // Afficher une alerte en cas de montant invalide
+    }
+}
+
+// Fonction pour récupérer la valeur du jeton CSRF depuis les cookies
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Fonction pour afficher le message de succès
+function showSuccessMessage(message) {
+    var successMessageDiv = document.getElementById('successMessage');
+    successMessageDiv.textContent = message;
+    successMessageDiv.style.display = 'block';
+    setTimeout(function() {
+        successMessageDiv.style.display = 'none';
+    }, 5000); // Masquer le message après 5 secondes
+}
+
+// Fonction pour rechercher dans la table
+function search() {
+    var input = document.getElementById('searchInput').value.toLowerCase();
+    var table = document.getElementById('pretTable');
+    var rows = table.getElementsByTagName('tr');
+
+    for (var i = 1; i < rows.length; i++) { // Commencer à l'index 1 pour exclure la ligne d'en-tête
+        var rowData = rows[i].getElementsByTagName('td');
+        var found = false;
+
+        for (var j = 0; j < rowData.length; j++) {
+            if (rowData[j].innerText.toLowerCase().indexOf(input) > -1) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            rows[i].style.display = '';
+        } else {
+            rows[i].style.display = 'none';
+        }
+    }
+}
+</script>
+
+{% endblock %}

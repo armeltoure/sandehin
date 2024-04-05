@@ -1,0 +1,150 @@
+{% extends 'ugacaci/base.html' %}
+{% load humanize %}
+
+{% block content %}
+ 
+
+  <div class="container">
+    <h1 class="text-center alert alert-success font-weight-normal"> Bienvenue sur la page de Gestion de vos Adherents </h1><br>
+    
+  </div>
+
+  <form method="post" action="{% url 'search_client' %}" class="m-4" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="input-group container">
+      <span class="input-group-addon">
+        <i class="glyphicon glyphicon-search"></i>
+      </span>
+      <input type="text" class="form-control m-2" placeholder="Rechercher..." name="numero_telephone" id="telephoneInput">
+      <span class="input-group-btn m-2">
+        <button class="btn btn-info" type="submit">
+          <span class="glyphicon glyphicon-search m-2"></span> Recherche
+        </button>
+      </span>
+    </div>
+  </form>
+
+  <div class="container">
+    {% if resultats %}
+      {% for client in resultats %}
+        <div class="text-center">
+          <h2>Compte N° <span class="uppercase">{{ client.id }}</span></h2>
+        </div>
+
+        <div class="form-group row ">
+          <label for="nom" class="col-sm-2 col-form-label">Nom & Prénoms</label>
+          <div class="col-sm-5">
+            <input type="text" class="form-control" id="nom" value="{{ client.nom_prenoms|title }}" readonly>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="telephone" class="col-sm-2 col-form-label">Téléphone</label>
+          <div class="col-sm-5">
+            <input type="tel" class="form-control" id="telephone" value="{{ client.numero_telephone }}" readonly>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="profession" class="col-sm-2 col-form-label">Profession</label>
+          <div class="col-sm-5">
+            <input type="text" class="form-control" id="profession" value="{{ client.profession|title }}" readonly>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="localite" class="col-sm-2 col-form-label">Zone d'activité</label>
+          <div class="col-sm-5">
+            <input type="text" class="form-control" id="localite" value="{{ client.localite|title }}" readonly>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="solde_actuel" class="col-sm-2 col-form-label">Solde actuel</label>
+          <div class="col-sm-5">
+            <input type="text" class="form-control" id="solde_actuel" value="{{ client.get_solde_actuel|intcomma  }}" readonly>
+
+          </div>
+        </div>
+        {% if error_message %}
+        <div class="alert alert-danger">
+            {{ error_message }}
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'effectuer_operation' %}" id="operationForm">
+          {% csrf_token %}
+          <input type="hidden" name="compte_id" value="{{ client.id }}">
+          <input type="hidden" name="date_operation" value="{{ value_date_a_envoyer }}">
+         <input type="hidden" name="collection_name" value="{{ collection.collection_name }}">
+
+          <div class="form-group row">
+            <label for="montant_operation" class="col-sm-2 col-form-label">Montant d'opération</label>
+            <div class="col-sm-5">
+              <input type="number" name="montant_operation" id="montant_operation" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <!-- Boutons d'opération liés aux vues correspondantes -->
+            <button type="submit" class="btn btn-warning" name="operation" value="debit">Rétrait sur le compte</button>
+            <button type="submit" class="btn btn-danger" name="operation" value="credit">Dépôt sur le compte</button>
+          </div>
+        </form>
+      {% endfor %}
+    {% else %}
+      <div class="text-center">
+        <p>Aucun résultat trouvé.</p>
+      </div>
+    {% endif %}
+  </div>
+  <br>
+
+  <div class="btn-lg alert-alert-light text-center">
+    <a class="btn btn-outline-primary" href="{% url 'adherent' %}">Nouveau adherent </a>
+    <a class="btn btn-outline-success" href="{% url 'liste_clients' %}">liste des Adherents</a>
+    <a class="btn btn-outline-warning" href="{% url 'auth_required_op' %}">liste des Operations</a>
+    <a href="{% url 'auth_required_pret' %}" class="btn btn-outline-danger">Gestion des Prêts</a>
+    <a href="{% url 'liste_prets_confirmes' %}" class="btn btn-outline-secondary">Liste des Prêts</a>
+  </div>
+  <br>
+
+  <div class="text-center">
+    <a href="{% url 'home' %}" class="badge badge-pill badge-dark">deconnexion</a>
+  </div>
+
+{% if error_message %}
+    <div class="modal fade" id="errorMessageModal" tabindex="-1" role="dialog" aria-labelledby="errorMessageModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorMessageModalLabel">Erreur</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ error_message }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Affiche le modal
+        $(document).ready(function () {
+            $('#errorMessageModal').modal('show');
+
+            // Ferme le modal après 5 secondes
+            setTimeout(function () {
+                closeErrorMessageModal();
+            }, 5000);
+        });
+
+        // Fonction pour fermer le modal
+        function closeErrorMessageModal() {
+            $('#errorMessageModal').modal('hide');
+        }
+    </script>
+{% endif %}
+{% endblock %}

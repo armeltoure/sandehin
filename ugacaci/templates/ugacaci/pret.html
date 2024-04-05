@@ -1,0 +1,53 @@
+{% extends 'ugacaci/base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="container-fluid">
+    <h3 class="text-center alert alert-success font-weight-normal">Liste des clients éligibles pour un Prêt</h3>
+</div>
+
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom et Prénoms</th>
+                    <th>Frais d'Adhesion</th>                    
+                    <th>cotisation effectuée</th>
+                    <th>Nombre de Dépôts</th>
+                    <th>Date d'Ouverture</th>
+                    <th>Lieu d'ouverture</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients_eligibles %}
+                <tr>
+                    <td>{{ client.nom_prenoms }}</td>
+                    {% if client.comptes_bancaires.all %}
+                        {% with compte=client.comptes_bancaires.first %}
+                            <td>{{ compte.solde_initial|intcomma  }} FCFA</td>
+                            
+                            <td>{{ compte.montant_cotise_moins_ouverture|intcomma }} FCFA</td>
+                            <td>{{ compte.nb_depot }}</td>
+                            <td>{{ compte.date_ouverture }}</td>
+                            <td>{{ client.ville }}</td>
+                            <td><a class="badge badge-pill badge-success" href="{% url 'demande_pret' client_id=client.id %}
+                                ">Prêt</a></td>
+                            
+                        {% endwith %}
+                    {% else %}
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    {% endif %}
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

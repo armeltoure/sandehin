@@ -1,0 +1,243 @@
+{% extends 'ugacaci/base.html' %}
+{% load humanize %}
+{% block content %}
+<!-- Modal de confirmation de suppression -->
+
+
+<div class="container">
+    <!-- Modèle de confirmation de suppression -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmer la suppression</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer ce client ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="badge badge-pill badge-secondary" data-dismiss="modal">Annuler</button>
+                <a id="confirmDelete" class="badge badge-pill badge-danger">Supprimer</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <h2 class="text-center alert alert-success">Liste des Adhérents</h2>
+    <div class="container mt-4">
+        <form id="searchForm" class="mb-3">
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="form-group">
+                        
+                        <input type="text" class="form-control d-print-none" id="searchInput" placeholder="Entrez le nom de la ville que vous cherchez">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary btn-block d-print-none">Rechercher</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <p id="nombreResultats" class="d-print-none">Résultats de la recherche : {{ nombre_resultats }} / {{ total_clients }} </p>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="sticky-header ">
+                <tr class="table-primary">
+                    <th>Nom & Prénoms</th>
+                    <th>Contact</th>
+                    <th>Pièce identité</th>
+                    
+                    <th>Solde actuel</th>
+                    <th class="text-center">Ville d'ouverture</th>
+                    <th class="text-center d-print-none">Actions</th> <!-- Colonne pour les boutons d'action -->
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for client in clients %}
+                    <tr>
+                        <td>{{ client.nom_prenoms|title }}</td>
+                        <td>{{ client.numero_telephone }}</td>
+                        <td>{{ client.numero_cni|upper }}</td>
+                      
+                        <td>
+                            {% if client.get_solde_actuel %}
+                                {{ client.get_solde_actuel|intcomma }} FCFA
+                            {% else %}
+                                Aucun compte associé
+                            {% endif %}
+                        </td>
+                        <td class="text-center">{{ client.ville.nom }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <form class="d-inline d-print-none" method="post" action="{% url 'modifier_client' client.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-link">
+                                        <i class="fas fa-edit d-print-none">Modifier</i> <!-- Icône d'édition -->
+                                    </button>
+                                </form>
+                                <button class="btn btn-danger delete-client d-print-none" data-client-id="{{ client.id }}" data-url="{% url 'auth_required_page' %}">Supprimer</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="pagination" class="text-center mt-4">
+        <ul class="pagination justify-content-center"></ul>
+    </div>
+    <div class="container-fluid -bottom text-right">
+        <p id="nombreResultats"> <h4 class="d-print-none" >Total des Adherents : {{ nombre_resultats }} </h4></p>
+    </div>
+    
+    
+    <a href="{% url 'gestionpage' %}" class="badge badge-pill badge-warning d-print-none" valeur="Retour">RETOUR</a>
+     <div class="text-center mt-4">
+        <button class="btn btn-primary d-print-none" d-print-none onclick="printPage()">Imprimer</button>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    function printPage() {
+        window.print(); // Déclenche l'impression de la page
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+       
+     
+        
+        // Gestion de la confirmation de suppression et redirection
+        const deleteButtons = document.querySelectorAll('.delete-client');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const clientId = this.getAttribute('data-client-id');
+                const url = this.getAttribute('data-url');
+                const confirmDeleteButton = document.querySelector('#confirmDelete');
+                confirmDeleteButton.href = `${url}?client_id=${clientId}`;
+                $('#confirmDeleteModal').modal('show');
+            });
+        });
+    
+        // Pagination des enregistrements
+        const recordsPerPage = 25;
+        let currentPage = 1;
+    
+        function displayRecords(page) {
+            const rows = document.querySelectorAll('tbody tr');
+            const startIndex = (page - 1) * recordsPerPage;
+            const endIndex = startIndex + recordsPerPage;
+    
+            rows.forEach(row => {
+                row.style.display = 'none';
+            });
+    
+            for (let i = startIndex; i < endIndex && i < rows.length; i++) {
+                rows[i].style.display = '';
+            }
+        }
+    
+        function createPaginationButtons() {
+            const totalRecords = document.querySelectorAll('tbody tr').length;
+            const totalPages = Math.ceil(totalRecords / recordsPerPage);
+            const pagination = document.querySelector('.pagination');
+    
+            const previousButton = document.createElement('li');
+            previousButton.classList.add('page-item');
+            const previousLink = document.createElement('a');
+            previousLink.classList.add('page-link');
+            previousLink.textContent = 'Précédent';
+            previousButton.appendChild(previousLink);
+            pagination.appendChild(previousButton);
+    
+            previousLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayRecords(currentPage);
+                }
+            });
+    
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.textContent = i;
+                a.href = '#';
+                li.classList.add('page-item');
+                a.classList.add('page-link');
+                li.appendChild(a);
+                pagination.appendChild(li);
+    
+                a.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    currentPage = parseInt(this.textContent);
+                    displayRecords(currentPage);
+                });
+            }
+    
+            const nextButton = document.createElement('li');
+            nextButton.classList.add('page-item');
+            const nextLink = document.createElement('a');
+            nextLink.classList.add('page-link');
+            nextLink.textContent = 'Suivant';
+            nextButton.appendChild(nextLink);
+            pagination.appendChild(nextButton);
+    
+            nextLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayRecords(currentPage);
+                }
+            });
+    
+            displayRecords(currentPage);
+        }
+    
+        createPaginationButtons();
+    
+        // Recherche dans les enregistrements
+const searchForm = document.querySelector('#searchForm');
+const nombreResultats = document.querySelector('#nombreResultats');
+
+searchForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const searchInput = document.querySelector('#searchInput').value.trim().toLowerCase();
+    const rows = document.querySelectorAll('tbody tr');
+    let nombreResultatsAffiche = 0;
+
+    rows.forEach(row => {
+        let found = false;
+        row.querySelectorAll('td').forEach(cell => {
+            const cellText = cell.textContent.trim().toLowerCase();
+            if (cellText.includes(searchInput)) {
+                found = true;
+            }
+        });
+
+        if (found) {
+            row.style.display = '';
+            nombreResultatsAffiche++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Mettre à jour le texte du nombre de résultats affiché
+    nombreResultats.textContent = `Résultats de la recherche : ${nombreResultatsAffiche} / {{ total_clients }}`;
+});
+
+    });
+    
+</script>
+{% endblock %}
+
+

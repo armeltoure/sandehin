@@ -1,0 +1,61 @@
+{% extends 'ugacaci/base.html' %}
+{% load humanize %}
+{% block content %}
+<div class="container">
+    <div class="text-center alert alert-success">
+        <h1>Opérations de la semaine</h1>
+    </div>
+    <form method="post" action="{% url 'operations_semaine' %}" class="m-4" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group container">
+          <span class="input-group-addon">
+            <i class="glyphicon glyphicon-search"></i>
+          </span>
+          <input type="text" class="form-control m-2 d-print-none" placeholder="Rechercher par lieu d'opération..." name="lieu_operation" id="lieuOperationInput">
+          <span class="input-group-btn m-2">
+            <button class="btn btn-info d-print-none" type="submit">
+              <span class="glyphicon glyphicon-search m-2 d-print-none"></span> Recherche
+            </button>
+          </span>
+        </div>
+    </form>
+
+    <div class="d-flex justify-content-center">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nom & Prénoms du client</th>
+                    <th>Date de l'opération</th>
+                    <th>Type d'opération</th>
+                    <th>Montant</th>
+                    <th>Lieu des operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for operation in operations %}
+                    <tr>
+                        <td>{{ operation.compte.client.nom_prenoms|title }}</td>
+                        <td>{{ operation.date_operation }}</td>
+                        <td>{{ operation.type_operation }}</td>
+                        <td>{{ operation.montant|intcomma }} FCFA</td>
+                        <td>{{ operation.lieu_operation }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{% url 'operation' %}" class="badge badge-pill badge-warning d-print-none" valeur="Retour">RETOUR</a>
+</div>
+<div class="text-center mt-4">
+    <button class="btn btn-primary d-print-none" onclick="printPage()">Imprimer</button>
+</div>
+
+</div>
+
+<script>
+function printPage() {
+    window.print(); // Déclenche l'impression de la page
+}
+</script>
+{% endblock %}
+

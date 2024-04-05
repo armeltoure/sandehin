@@ -1,0 +1,597 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  
+  <!-- Inclure les fichiers jQuery et jQuery UI Datepicker -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- Inclure jQuery (à partir d'un CDN pour cet exemple) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+  $(document).ready(function() {
+    $('#searchButton').click(function() {
+      var telephone = $('#telephoneInput').val();
+
+      // Effectuer la requête Ajax
+      $.ajax({
+        url: '/votre_url_de_recherche/',  // URL de votre vue de recherche Django
+        type: 'POST',
+        data: {
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+          telephone: telephone
+        },
+        success: function(data) {
+          // Mettre à jour les champs du formulaire avec les données reçues
+          $('#nom').val(data.nom_prenoms);
+          $('#telephone').val(data.numero_telephone);
+          $('#localite').val(data.localite);
+          // Mettre à jour d'autres champs ici si nécessaire
+        },
+        error: function(error) {
+          console.log(error);
+          // Gérer les erreurs si la requête échoue
+        }
+      });
+    });
+  });
+</script>
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<title>gestion ugacaci</title>
+  <style>
+    .pagination.spaced-pagination > li {
+        margin-right: 10px; /* Ajustez cet espacement selon vos préférences */
+    }
+</style>
+	<style>
+.custom-input {
+    width: 2%; /* Personnalisez la largeur selon vos besoins */
+}
+
+        /* Appliquez le style pour afficher en majuscules */
+        .uppercase {
+            text-transform: uppercase;
+        }
+  
+
+    .increment-button {
+        background-color: green;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .decrement-button {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+
+
+
+
+.cart-container #checkout-button {
+  display: none;
+}
+
+.cart-container:hover #checkout-button {
+  display: inline;
+}
+
+/* debut gestion du modal panier */
+		/* Style du modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10%;
+  height: 10%;
+  
+  justify-content: center;
+  align-items: center;
+}
+#message {
+ color: #FFFFFF; /* Couleur du texte (blanc dans cet exemple) */
+  background-color: #2bd900; /* Couleur d'arrière-plan du message (bleu dans cet exemple) */
+  padding: 11px;/* Couleur du texte (blanc dans cet exemple) */
+}
+
+.modal-content {
+ 
+  background-color: #2bd900;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+/* fin gestion du modal*/
+		
+		/* Votre code CSS ici */
+		body {
+			margin-left: 0.1cm;
+			margin-right: 0.1cm;
+			font-family: Arial, sans-serif;
+		}
+
+		/* Styles pour le menu de navigation */
+
+	
+	</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://kit.fontawesome.com/xxxxxxxxxx.js" crossorigin="anonymous"></script>
+	<meta http-equiv="refresh" content="">
+	<meta name="theme-color" content="#4285f4"> <!--couleur du theme de la page-->
+	
+	<!-- Required meta tags -->
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<title>ugacaci</title>
+
+	<style>
+.custom-input {
+    width: 2%; /* Personnalisez la largeur selon vos besoins */
+}
+
+
+    .increment-button {
+        background-color: green;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .decrement-button {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+
+
+
+
+.cart-container #checkout-button {
+  display: none;
+}
+
+.cart-container:hover #checkout-button {
+  display: inline;
+}
+
+/* debut gestion du modal panier */
+		/* Style du modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10%;
+  height: 10%;
+  
+  justify-content: center;
+  align-items: center;
+}
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Changez cette couleur selon votre design */
+    z-index: 100;
+}
+
+#message {
+ color: #FFFFFF; /* Couleur du texte (blanc dans cet exemple) */
+  background-color: #2bd900; /* Couleur d'arrière-plan du message (bleu dans cet exemple) */
+  padding: 11px;/* Couleur du texte (blanc dans cet exemple) */
+}
+
+.modal-content {
+ 
+  background-color: #2bd900;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+/* fin gestion du modal*/
+		
+		/* Votre code CSS ici */
+		body {
+			margin-left: 0.1cm;
+			margin-right: 0.1cm;
+			font-family: Arial, sans-serif;
+		}
+		/*centrer le tableau javascript dans mon checkout*/
+		.centered-cell {
+        text-align: center; /* Centre le contenu horizontalement */
+        vertical-align: middle; /* Centre le contenu verticalement */
+        }
+
+
+		/* Styles pour le menu de navigation */
+
+		.navbar li {
+			list-style-type: none;
+			display: inline;
+			margin-right: 20px;
+		}
+
+		.navbar li a {
+			text-decoration: none;
+			color: rgb(228, 204, 204);
+		}
+
+		/* Style pour les images dans le slider */
+		.carousel-inner img {
+			max-height: 300px;
+			/* Ajustez la hauteur maximale selon vos besoins */
+			width: auto;
+			/* Pour conserver la proportion d'origine */
+			margin: 0 auto;
+			/* Pour centrer les images horizontalement */
+		}
+
+		.espace-image {
+			display: flex;
+			justify-content: space-between;
+			width: 12cm;
+			/* Largeur totale de l'espace image */
+		}
+
+		.espace-image img {
+			width: 90cm;
+			/* Largeur de chaque image (environ 3 colonnes) */
+			margin-right: 0.1cm;
+			/* Espacement de 0,1 cm entre les images */
+		}
+
+		/* Style pour le sous-menu initiallement caché */
+		.sub-menu {
+			display: none;
+			position: absolute;
+			background-color: #8f8ee7;
+			/* Couleur de fond du sous-menu */
+			z-index: 1;
+		}
+
+		/* Style de survol pour afficher le sous-menu */
+		.livres-numerics:hover .sub-menu {
+			display: block;
+		}
+
+		.divider:after,
+		.divider:before {
+			content: "";
+			flex: 1;
+			height: 1px;
+			background: #eee;
+		}
+
+		.h-custom {
+			height: calc(100% - 73px);
+		}
+
+		@media (max-width: 450px) {
+			.h-custom {
+				height: 100%;
+			}
+		}
+
+
+		.custom-form {
+			margin-left: 2cm;
+			/* Marge de 5 cm à gauche */
+			margin-right: 2cm;
+			/* Marge de 5 cm à droite */
+		}
+
+		/*formulaire de connexion*/
+		.card-registration .select-input.form-control[readonly]:not([disabled]) {
+			font-size: 1rem;
+			line-height: 2.15;
+			padding-left: .75em;
+			padding-right: .75em;
+		}
+
+		.card-registration .select-arrow {
+			top: 13px;
+		}
+
+		.gradient-custom-2 {
+			/* fallback for old browsers */
+			background: #fccb90;
+
+			/* Chrome 10-25, Safari 5.1-6 */
+			background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+
+			/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+			background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+		}
+
+		@media (min-width: 768px) {
+			.gradient-form {
+				height: 100vh !important;
+			}
+		}
+
+		@media (min-width: 769px) {
+			.gradient-custom-2 {
+				border-top-right-radius: .3rem;
+				border-bottom-right-radius: .3rem;
+			}
+		}
+	</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://kit.fontawesome.com/xxxxxxxxxx.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+	<nav class="navbar sticky-top navbar-light bg-dark text-white">
+
+
+		<ul class="navbar-brand text-white">
+			
+
+			<li class="badge list-main"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset" viewBox="0 0 16 16">
+  <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
+</svg><a target="_blank" href="https://wa.me/+2250708740878">+225  0708 74 0878</a></li>
+			<li class="badge ti-email"><a target="_blank"
+					href="mailto:ugacaci@gmail.com">ugacaci@gmail.com</a> </li>
+		
+			
+
+			
+		</ul>
+	
+		 <span class="cart-icon">
+        
+			
+
+    </span>
+		</i> <!-- Vous devez inclure la bibliothèque Font Awesome pour les icônes -->
+       
+
+	</nav>
+
+	<nav class="navbar sticky-top navbar-light bg-light justify-content-center">
+		<a href="{% url 'home' %}" class="navbar-brand">
+		  <img src="{% static 'images/logo1.png' %}" class="card-img" alt="...">
+		</a>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+		<h2 class="text-dark"><i>Gestion des Adherents UGACA-CI</i></h2>
+	  </nav>
+	<br>
+	{% block content %}
+
+	{% endblock %}
+	<br>
+	<footer class="bg-body-tertiary text-center">
+  <!-- Grid container -->
+  <div class="container p-4">
+    <!-- Section: Images -->
+    <section class="">
+      <div class="row">
+        <div class="col-lg-2 col-md-12 mb-4 mb-md-0">
+          <div data-mdb-ripple-init
+            class="bg-image hover-overlay shadow-1-strong rounded"
+            data-ripple-color="light"
+          >
+            
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-12 mb-4 mb-md-0">
+          <div data-mdb-ripple-init
+            class="bg-image hover-overlay shadow-1-strong rounded"
+            data-ripple-color="light"
+          >
+            
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-12 mb-4 mb-md-0">
+          <div data-mdb-ripple-init
+            class="bg-image hover-overlay shadow-1-strong rounded"
+            data-ripple-color="light"
+          >
+            
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-12 mb-4 mb-md-0">
+          <div data-mdb-ripple-init
+            class="bg-image hover-overlay shadow-1-strong rounded"
+            data-ripple-color="light"
+          >
+           
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-12 mb-4 mb-md-0">
+          <div data-mdb-ripple-init
+            class="bg-image hover-overlay shadow-1-strong rounded"
+            data-ripple-color="light"
+          >
+           
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-12 mb-4 mb-md-0">
+          <div data-mdb-ripple-init
+            class="bg-image hover-overlay shadow-1-strong rounded"
+            data-ripple-color="light"
+          >
+            
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Section: Images -->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <footer class="footer-bottom">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+        © 2023 Copyright: UGACA-CI
+    </div>
+</footer>
+
+  <!-- Copyright -->
+</footer>
+	<!-- /End Footer Area -->
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
+    {% block js %}
+
+
+  <script>
+
+function validateForm() {
+
+  // Récupérer les valeurs des champs  
+  let nom = document.getElementById('nom_prenoms').value; 
+  let cni = document.getElementById('numero_cni').value; 
+  let localite = document.getElementById('localite').value; 
+  let profession = document.getElementById('profession').value; 
+  let telephone = document.getElementById('numero_telephone').value;
+  let ville = document.getElementById('ville').value;
+  let montant=document.getElementById('montant').value;
+
+  // Validation nom  
+  if(!nom) {
+    showError("Le nom est obligatoire");
+    return false;
+  }
+  // Validation cni  
+  if(!cni) {
+    showError("numero cni obligatoire");
+    return false;
+  }
+  // Validation localite 
+  if(!localite) {
+    showError("La localite est obligatoire");
+    return false;
+  }
+  // Validation profession 
+  if(!profession) {
+    showError("La profession est obligatoire");
+    return false;
+  }
+ if(!ville) {
+    showError("La ville est obligatoire");
+    return false;
+  }
+
+  if(!montant || montant<0) {
+    showError("montant incorrect");
+    return false;
+  }
+  // Validation téléphone
+  if(!validatePhone(telephone)) {
+    showError("Le format du téléphone est incorrect"); 
+    return false;
+  }
+
+
+  showConfirmation(); 
+  return true;
+
+}
+
+// Vérifie si 10 chiffres
+function validatePhone(phone) {
+  return phone.length === 10; 
+}
+   
+function showConfirmation() {
+
+  let confirmation = document.getElementById('confirmation');
+  confirmation.style.display = 'block';
+  
+  setTimeout(() => {
+    confirmation.style.display = 'none'; 
+  }, 7000);
+
+}
+
+function showError(message) {
+
+  let error = document.getElementById('error'); 
+  error.innerHTML = message;  
+  error.style.display = 'block';
+  
+  setTimeout(() => {
+    error.style.display = 'none';
+  }, 7000);  
+}
+// Initialization for ES Users
+import { Ripple, initMDB } from "mdb-ui-kit";
+
+initMDB({ Ripple });
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+{% endblock %}
+
+</body>
+
+</html>

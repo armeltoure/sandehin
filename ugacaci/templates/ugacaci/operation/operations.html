@@ -1,0 +1,19 @@
+{% extends 'ugacaci/base.html' %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center alert alert-success">Liste des operations</h1>
+</div>
+
+<div class="container">
+    <div class="text-center">
+<a href="{% url 'operations_jour' %}" class="btn btn-outline-warning btn-lg active" role="button" aria-pressed="true">Operations du jour</a>
+<a href="{% url 'operations_semaine' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Operations de la Semaine</a>
+<a href="{% url 'operations_mois' %}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Operations du Mois</a>
+</div>
+<br>
+<div class="text-center">
+ <a href="{% url 'gestionpage' %}" class="badge badge-pill badge-warning about-content text-center" valeur="Retour">RETOUR</a>
+ </div>
+</div>
+
+{% endblock %}

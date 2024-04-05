@@ -1,0 +1,53 @@
+{% extends 'ugacaci/base.html' %} {% block content %}
+<div class="content" style="width: 98%; text-align: right; margin: 0">
+ 
+</div>
+<div class="bg-warning container d-flex justify-content-center align-items-center">
+  <marquee>
+    <h4 class="text-center">      
+      Bienvenue dans votre espace, Veillez entrer votre Login et votre mot de passe pour acceder à la page Gestionnaire.
+    </h4>
+  </marquee>
+</div>
+<br>
+
+
+
+
+<div class="bg-info text-center container">
+  <h4>Vous êtes sur la plateforme de la ville de:  {{ collection.collection_name }}</h4>
+</div>
+<p></p>
+<!-- Bouton pour ouvrir le modal -->
+<div class="container-fluid">
+  <div class="col-lg-12 justify-content-center">
+  <form action="{% url 'gestionpage' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="collection_name" id="collection_name" value="{{ collection.collection_name }}">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Login</label>
+        <input type="text" class="form-control" id="login" name="login"  placeholder="Entrer le nom d'utilisateur">
+        <small id="emailHelp" class="form-text text-muted">Si vous aviez oublié votre Login , veillez appeler l'administrateur</small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Entrer  votre mot de passe">
+      </div>
+    
+   <div class="d-flex justify-content-center">
+    <button type="submit" class="btn btn-primary">Submit</button>
+</div>
+
+  </form>
+</div>
+</div>
+<!-- Le formulaire modal -->
+
+
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+{% endblock %}

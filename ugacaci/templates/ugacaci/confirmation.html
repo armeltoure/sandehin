@@ -1,0 +1,62 @@
+{% extends 'ugacaci/base.html' %}
+{% load humanize %} 
+{% block content %}
+<div class="container-fluid">
+    <h2 class="text-center alert alert-success font-weight-normal">Confirmation de la demande du prêt de la tontine</h2>
+    
+    <!-- Informations sur le client -->
+    <h3 class="mt-4 text-center">Informations sur l'adhérent</h3>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Nom et prénoms:</th>
+                <td>{{ client.nom_prenoms }}</td>
+                <th>Date de naissance:</th>
+                <td>{{ client.date_naissance }}</td>
+                <th>Lieu de naissance:</th>
+                <td>{{ client.lieu_naissance }}</td>
+            </tr>
+            <tr>
+                <th>Numéro de téléphone:</th>
+                <td>{{ client.numero_telephone }}</td>
+                <th>Lieu d'ouverture du compte:</th>
+                <td>{{ client.ville }}</td>
+                <th>Profession:</th>
+                <td>{{ client.profession }}</td>
+            </tr>
+            <tr>
+                <th>Zone d'activité:</th>
+                <td colspan="5">{{ client.localite }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+   <!-- Informations sur la demande de prêt -->
+<h3 class="mt-4 text-center">Informations sur la demande de prêt</h3>
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>Montant demandé:</th>
+            <td>{{ demande_pret.montant_demande|intcomma }} FCFA</td>
+            <th>Date de demande:</th>
+            <td>{{ demande_pret.date_demande }}</td>
+        </tr>
+        <tr>
+            <th>Lieu de demande:</th>
+            <td>{{ demande_pret.lieu_demande|default_if_none:"N/A" }}</td>
+            <th>Date de remboursement:</th>
+            <td>{{ demande_pret.date_rembourssement|default_if_none:"N/A" }}</td>
+        </tr>
+        <tr>
+            <th>Montant de remboursement:</th>
+            <td colspan="3">{{ demande_pret.montant_rembourssement|default_if_none:"N/A"|intcomma }} FCFA</td>
+        </tr>
+    </tbody>
+</table>
+
+    <!-- Bouton d'impression -->
+    <div class="text-center mt-3">
+        <button onclick="window.print()" class="btn btn-primary d-print-none">Imprimer</button>
+    </div>
+</div>
+{% endblock %}

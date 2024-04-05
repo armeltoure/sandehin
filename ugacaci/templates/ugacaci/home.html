@@ -1,0 +1,97 @@
+{% extends 'ugacaci/base.html'%} {% block content %}
+<center>
+  <h3><strong class="bg">liste des Agences Ugaca-ci</strong></h3>
+</center>
+<br />
+
+<div class="container-fluid">
+  <div>
+    <a class="text-dark" href="{% url 'login' collection_name='Duekoue' %} " onclick="storeSelectedCity('Duekoue')">
+      <button type="button" class="btn btn-outline-primary btn-lg btn-block">
+        Duekoue</button
+      ><br />
+    </a>
+  </div>
+  <div>
+    <a class="text-dark" href="{% url 'login' collection_name='Man' %} " onclick="storeSelectedCity('Abidjan')">
+      <button type="button" class="btn btn-outline-warning  btn-lg btn-block">
+        Man</button
+      ><br />
+    </a>
+  </div>
+  <div>
+    <a class="text-dark" href="{% url 'login' collection_name='Bouake' %}"onclick="storeSelectedCity('Bouake')"
+      ><button type="button" class="btn btn-outline-secondary btn-lg btn-block">
+        Bouake
+      </button></a
+    ><br />
+  </div>
+  <div>
+    <a class="text-dark" href="{% url 'login' collection_name='Daloa' %}"onclick="storeSelectedCity('Daloa')"
+      ><button type="button" class="btn btn-outline-success btn-lg btn-block">
+        Daloa
+      </button></a
+    ><br />
+  </div>
+  <div>
+    <a class="text-dark" href="{% url 'login' collection_name='Katiola' %}"onclick="storeSelectedCity('Katiola')">
+      <button type="button" class="btn btn-outline-danger btn-lg btn-block">
+        Katiola
+      </button></a
+    ><br />
+  </div>
+  <div>
+    <div>
+      <a class="text-dark" href="{% url 'login' collection_name='Oume' %}"onclick="storeSelectedCity('Oume')"
+        ><button type="button" class="btn btn-outline-primary btn-lg btn-block">
+          Oume
+        </button></a
+      ><br />
+    </div>
+    <div>
+      <div>
+        <a
+          class="text-dark"
+          href="{% url 'login' collection_name='San-Pedro' %}"onclick="storeSelectedCity('San-Pedro')"
+          ><button
+            type="button"
+            class="btn btn-outline-warning btn-lg btn-block"
+          >
+            San-Pedro
+          </button></a
+        ><br />
+      </div>
+      <div>
+        <div>
+          <a
+            class="text-dark"
+            href="{% url 'login' collection_name='Yamoussoukro' %}"onclick="storeSelectedCity('Yamoussoukro')"
+            ><button
+              type="button"
+              class="btn btn-outline-danger btn-lg btn-block"
+            >
+              Yamoussoukro
+            </button></a
+          ><br />
+        </div>
+        <div></div>
+        {% endblock %}
+         {% block js%}
+         
+<script>
+    // Fonction pour stocker la valeur de la ville sélectionnée dans la session
+    function storeSelectedCity(city) {
+        sessionStorage.setItem("selected_city", city);
+    }
+
+
+          .user-info span {
+            display: inline;
+            margin-right: 10px;
+            /* Pour ajouter un espace entre les éléments en ligne */
+          }
+
+        
+ </style>
+        {% endblock %}
+     

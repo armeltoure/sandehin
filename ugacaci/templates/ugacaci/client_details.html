@@ -1,0 +1,72 @@
+{% extends 'ugacaci/base.html' %}
+{% load humanize %}
+{% block content %}
+<div class="container">
+    <h3 class="text-center alert alert-success">Détails de la Cotisation de {{ client.nom_prenoms|title }}</h3>
+
+    <!-- Affichage des informations sur le client -->
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Informations du client</h3>
+            <p><strong>Nom & Prénoms :</strong> {{ client.nom_prenoms|title }}</p>
+            <p><strong>Date de Naissance :</strong> {{ client.date_naissance|date:"d F Y" }}</p>
+            <p><strong>Lieu de Naissance :</strong> {{ client.lieu_naissance|title }}</p>
+            <p><strong>Téléphone :</strong> {{ client.numero_telephone }}</p>
+            <p><strong>Pièce d'identité :</strong> {{ client.numero_cni|upper }}</p>
+            <p><strong>Profession :</strong> {{ client.profession|title }}</p>
+            <p><strong>Ville d'ouverture :</strong> {{ client.ville|title }}</p>
+            <!-- Ajoutez d'autres informations sur le client ici -->
+        </div>
+    </div>
+
+    <!-- Affichage des détails de l'opération -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Détails des Opérations</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type d'Opération</th>
+                        <th>Montant de l'Opération</th>
+                        <th>Commission Statuaire</th>
+                        <th>Date de l'Opération</th>
+                        <th>Lieu de l'Opération</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for operation in operations %}
+                    <tr>
+                        <td>{{ operation.type_operation }}</td>
+                        <td>{{ operation.montant|intcomma }} FCFA</td>
+                        <td>{{ operation.commission|intcomma }} FCFA</td>
+                        <td>{{ operation.date_operation }}</td>
+                        <td>{{ operation.lieu_operation }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Affichage du solde actuel du compte bancaire -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h5>Solde actuel du compte :<strong> {{ solde_actuel|intcomma }} FCFA </strong></h5>
+        </div>
+    </div>
+    <div class="text-right mt-4">
+        <p>Nombre de crédits : {{ operations|length }}</p>
+    </div>
+    <!-- Autres éléments de l'interface -->
+    <div class="text-center mt-4">
+        <button class="btn btn-primary d-print-none" onclick="printPage()">Imprimer</button>
+    </div>
+    <a href="{% url 'gestionpage' %}" class="badge badge-pill badge-warning d-print-none">Retour</a>
+</div>
+
+<script>
+    function printPage() {
+        window.print(); // Déclenche l'impression de la page
+    }
+</script>
+{% endblock %}
